@@ -28,6 +28,37 @@ The Progressive JavaScript/TypeScript Framework. Vue is used to create dynamic &
 3. Create external JavaScript file
 4. Start create Vue app in the JS file
 
+### Vue CLI
+
+Use to create single page application which similar to create-react-app. It has more benefits as following:
+
+- use modern JavaScript features
+- provides us with a live-reload dev server
+- optimize our code for production
+
+Follow these steps to install:
+
+1. use npm to install vue
+
+```
+npm install -g @vue/cli
+```
+
+2. create Vue project
+
+```
+vue create my-project
+```
+
+3. Then, Vue will ask us the question about preset. You can choose freely.
+   1. Please pick a preset: Vue 2, **Vue 3** or manually select features
+   2. Choose a version of Vue.js: 2.x or **3.x**
+   3. Pick a linter / formatter config
+   4. Pick additional lint features: Lint on save or Lint on commit
+   5. Where do you prefer placing config for Babel, ESLint, etc.: In **dedicated config files** or In package.json
+   6. Save this as a preset for future projects: y/**N**
+   7. Pick the package manager to use when installing dependencies: **Yarn** or NPM
+
 ### Extension
 
 Install Vue extension in vscode named "Vetur" which helps you write Vue easier.
@@ -112,7 +143,7 @@ app.mount('#app');
 
 ## Directives
 
-Vue directives is a special word that can only appear in the form of a prefixed HTML attribute to add more functionality.
+Vue directives is a special word that can only appear in the form of a prefixed HTML attribute to add more functionality. For example: v-on:click, @click (You can use either v-on: or @ to refer to Vue directive)
 
 ```
 <element
@@ -120,7 +151,16 @@ Vue directives is a special word that can only appear in the form of a prefixed 
 </element>
 ```
 
-## Click events
+### Directives List
+
+- `v-on:click` or `@click` - when click the element
+- `v-on:mouseover` or `@mouseover` - when cursor mouse is entered the element
+- `v-on:mouseleave` or `@mouseleave` - when cursor mouse is leaved the element
+- `v-on:dblclick` or `@dblclick` - when double click at that element
+
+### Mouse events
+
+#### click events
 
 You can use `v-on:click` directives to add click events. Inside double quote, it's freely to insert any JavaScript code.
 
@@ -132,6 +172,45 @@ You can use `v-on:click` directives to add click events. Inside double quote, it
     <button v-on:click="age--">Decrease age</button>
     <div @click="title = 'Something new'">Change title</div>
   </div>
+```
+
+#### event object
+
+You can put function inside the directive and then receive event object in JavaScript function in the external JS. Event object store information about event such as event type, offset, position of the mouse cursor and much more.
+
+If you don't define any argument in the function, you will receive the event object as the first argument.
+
+```html
+<div @mouseover="handleEvent">mouseover</div>
+<div @mouseleave="handleEvent">mouseleave</div>
+<div @dblclick="handleEvent">double click</div>
+```
+
+```javascript
+methods: {
+  handleEvent(e) {
+    console.log(e)
+  }
+}
+```
+
+But if you want to define argument in the function and receive event object as well. You need to define `$event`
+
+```html
+<div @mouseover="handleEvent($event, 5)">mouseover</div>
+<div @mouseleave="handleEvent">mouseleave</div>
+<div @dblclick="handleEvent">double click</div>
+```
+
+```javascript
+methods: {
+  handleEvent(e, data) {
+    console.log(e)
+    if (data) {
+      console.log(data)
+    }
+  }
+}
 ```
 
 ## Method
@@ -207,3 +286,115 @@ const app = Vue.createApp({
 
 app.mount('#app');
 ```
+
+## Outputting Lists
+
+Using `v-for` directive to do outputting lists.
+
+```html
+<h1>Books</h1>
+<ul>
+  <li v-for="book in books">
+    <h3>{{ book.title }}</h3>
+    <p>{{ book.author }}</p>
+    <p>{{ book.age }}</p>
+  </li>
+</ul>
+```
+
+```javascript
+  data() {
+    return {
+      showBooks: true,
+      books: [
+        {
+          title: 'The Great Empire',
+          author: 'Chitsanupong',
+          age: 21,
+        },
+        {
+          title: 'The Abyssal World',
+          author: 'Carlos',
+          age: 18,
+        },
+        {
+          title: 'The Motivation of Life',
+          author: 'Mortos',
+          age: 26,
+        },
+      ],
+    };
+  },
+```
+
+## Attribute binding
+
+In order to make attribute in HTML can change dynamically, you can use `v-bind:attribute` to do attribute binding.
+
+For example: `v-bind:href` - bind with href attribute in `<a></a>`
+
+```html
+<a v-bind:href="url">visit website</a>
+```
+
+## Dynamic classes
+
+Use `v-bind:class` or `:class` to defined dynamic classes
+
+```html
+<ul>
+  <li v-for="book in books">
+    <h3 v-bind:class="{ published: book.isPublished }">{{ book.title }}</h3>
+    <p>{{ book.author }}</p>
+  </li>
+</ul>
+```
+
+```javascript
+ data() {
+    return {
+      books: [
+        {
+          title: 'The Great Empire',
+          author: 'Chitsanupong',
+          age: 21,
+          isPublished: true,
+        },
+        {
+          title: 'The Abyssal World',
+          author: 'Carlos',
+          age: 18,
+          isPublished: true,
+        },
+        {
+          title: 'The Motivation of Life',
+          author: 'Mortos',
+          age: 26,
+          isPublished: false,
+        },
+      ],
+    };
+```
+
+## Computed Properties
+
+computed properties is similar to data properties but it can be computed before the data will be used. If the data in data properties change, the method in computed properties will change as well which depend on that data.
+
+```html
+<ul>
+  <li v-for="book in filteredBooks">
+    <h3 v-bind:class="{ published: book.isPublished }">{{ book.title }}</h3>
+    <p>{{ book.author }}</p>
+  </li>
+</ul>
+```
+
+```javascript
+  computed: {
+    filteredBooks() {
+      return this.books.filter((book) => book.isPublished);
+    },
+  },
+```
+
+## Folder Structure in Vue CLI
