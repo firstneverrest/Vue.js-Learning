@@ -163,3 +163,47 @@ app.mount('#app');
 ```
 
 ## Conditional Rendering
+
+Use `v-if`, `v-else` and `v-show` to do conditional rendering.
+
+- `v-if` - if the condition is true, it will show the element inside of it. If the condition is false, it will remove the element out of the DOM.
+- `v-else` - use with `v-if`, if the condition of `v-if` is false, `v-else` will operate.
+- `v-show` - like `v-if` but it will use CSS to operate. If the condition is true, the element inside will be display block. On the other hand, the element inside will be display none, if the condition is false.
+
+```html
+<div id="app">
+  <div v-if="showBooks">
+    <h2>{{ title }}</h2>
+    <p>From: {{ author }} - {{ age }}</p>
+  </div>
+  <button @click="toggleShowBooks">
+    <span v-if="showBooks">Hide Books</span>
+    <span v-else>Show Books</span>
+  </button>
+
+  <div v-show="showBooks">currently showing books</div>
+</div>
+```
+
+```javascript
+const app = Vue.createApp({
+  data() {
+    return {
+      showBooks: true,
+      title: 'The Great Empire',
+      author: 'Chitsanupong',
+      age: 21,
+    };
+  },
+  methods: {
+    changeTitle(title) {
+      this.title = title;
+    },
+    toggleShowBooks() {
+      this.showBooks = !this.showBooks;
+    },
+  },
+});
+
+app.mount('#app');
+```
