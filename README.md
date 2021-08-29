@@ -19,10 +19,10 @@ The Progressive JavaScript/TypeScript Framework. Vue is used to create dynamic &
 ### Use Vue with CDN
 
 1. Create index.html
-2. Add this CDN code in index.html
+2. Add this CDN code in index.html (vue@next means version will always be latest version, you can define specific version with vue@3.0 or other)
 
 ```
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="https://unpkg.com/vue@next"></script>
 ```
 
 3. Create external JavaScript file
@@ -31,3 +31,135 @@ The Progressive JavaScript/TypeScript Framework. Vue is used to create dynamic &
 ### Extension
 
 Install Vue extension in vscode named "Vetur" which helps you write Vue easier.
+
+## Data and Template
+
+You can create template directly in HTML or create in JavaScript with template. But I recommend to create template in HTML to separate HTML from JavaScript and easier to write HTML.
+
+1. Create template in JavaScript
+
+```html
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Learning Vue</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
+```
+
+```javascript
+// app.js
+// root component
+const app = Vue.createApp({
+  // template in HTML
+  template: '<h2>This is {{ title }}</h2>',
+
+  // dynamic output
+  data() {
+    return {
+      title: 'The Great Empire',
+    };
+  },
+});
+
+app.mount('#app');
+```
+
+2. Create template in HTML (recommended)
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Learning Vue</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h2>{{ title }}</h2>
+      <p>From: {{ author }} - {{age}}</p>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
+```
+
+```javascript
+const app = Vue.createApp({
+  data() {
+    return {
+      title: 'The Great Empire',
+      author: 'Chitsanupong',
+      age: 21,
+    };
+  },
+});
+
+app.mount('#app');
+```
+
+## Directives
+
+Vue directives is a special word that can only appear in the form of a prefixed HTML attribute to add more functionality.
+
+```
+<element
+  prefix-directiveId="[argument:] expression [| filters...]">
+</element>
+```
+
+## Click events
+
+You can use `v-on:click` directives to add click events. Inside double quote, it's freely to insert any JavaScript code.
+
+```HTML
+ <div id="app">
+    <h2>{{ title }}</h2>
+    <p>From: {{ author }} - {{ age }}</p>
+    <button v-on:click="age++">Increase age</button>
+    <button v-on:click="age--">Decrease age</button>
+    <div @click="title = 'Something new'">Change title</div>
+  </div>
+```
+
+## Method
+
+Instead of write JS code directly in `v-on:click`, you can write in JS file instead.
+
+```HTML
+<!-- index.html -->
+<div @click="changeTitle('The Abyss')">Change title</div>
+```
+
+```javascript
+const app = Vue.createApp({
+  data() {
+    return {
+      title: 'The Great Empire',
+      author: 'Chitsanupong',
+      age: 21,
+    };
+  },
+  methods: {
+    changeTitle(title) {
+      this.title = title;
+    },
+  },
+});
+
+app.mount('#app');
+```
+
+## Conditional Rendering
