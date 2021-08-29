@@ -1,7 +1,16 @@
-// root component which will output inside #app
 const app = Vue.createApp({
-  // data, functions
-  template: '<h2>I am the template</h2>',
+  data() {
+    return {
+      title: 'The Great Empire',
+      author: 'Chitsanupong',
+      age: 21,
+    };
+  },
+  methods: {
+    changeTitle(title) {
+      this.title = title;
+    },
+  },
 });
 
 app.mount('#app');

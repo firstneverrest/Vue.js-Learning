@@ -5,10 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Learning Vue</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue@next"></script>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <h2>{{ title }}</h2>
+      <p>From: {{ author }} - {{ age }}</p>
+      <button v-on:click="age++">Increase age</button>
+      <button v-on:click="age--">Decrease age</button>
+      <div @click="changeTitle('The Abyss')">Change title</div>
+    </div>
     <script src="app.js"></script>
   </body>
 </html>
