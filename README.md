@@ -51,6 +51,7 @@ vue create my-project
 ```
 
 3. Then, Vue will ask us the question about preset. You can choose freely.
+
    1. Please pick a preset: Vue 2, **Vue 3** or manually select features
    2. Choose a version of Vue.js: 2.x or **3.x**
    3. Pick a linter / formatter config
@@ -58,6 +59,8 @@ vue create my-project
    5. Where do you prefer placing config for Babel, ESLint, etc.: In **dedicated config files** or In package.json
    6. Save this as a preset for future projects: y/**N**
    7. Pick the package manager to use when installing dependencies: **Yarn** or NPM
+
+4. After that, use `cd my-project` and run Vue project with `yarn serve`
 
 ### Extension
 
@@ -398,3 +401,156 @@ computed properties is similar to data properties but it can be computed before 
 ```
 
 ## Folder Structure in Vue CLI
+
+- node_modules - store all dependencies
+- public - index.html and icon
+- src
+  - assets - keep images
+  - components - Vue components
+  - App.vue - the root component of Vue
+  - main.js - render Vue component to HTML page
+- .gitignore - ignore files when using git
+- babel.config.js
+- package.json - store project data and dependencies
+- README.md - run commands
+- yarn.lock or package-lock.json - lock version of dependencies
+
+## Vue files and templates
+
+In a Vue file, it will be divided into 3 parts:
+
+1. template - write HTML (required)
+2. script - write JavaScript (option)
+3. style - write CSS (option)
+
+```vue
+<template>
+  <img alt="Vue logo" src="./assets/logo.png" />
+  <HelloWorld msg="Welcome to Your Vue.js App" />
+</template>
+
+<script>
+import HelloWorld from './components/HelloWorld.vue';
+
+// write everything like cdn such as data, methods, computed etc.
+export default {
+  name: 'App', // optional
+  components: {
+    HelloWorld,
+  },
+};
+</script>
+
+// these CSS will be global style
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+</style>
+```
+
+## Template refs
+
+allow to select HTML element in DOM like getElement in JavaScript.
+
+```vue
+<template>
+  <h1>{{ title }}</h1>
+  <input type="text" ref="name" />
+  <button @click="handleClick">Change Title</button>
+</template>
+
+<script>
+export default {
+  name: 'App',
+  data() {
+    return {
+      title: 'My first Vue App',
+    };
+  },
+  methods: {
+    handleClick() {
+      const title = this.$refs.name.value;
+      this.title = title;
+      this.$refs.name.classList.add('active');
+    },
+  },
+};
+```
+
+## Scoped & Global CSS
+
+Generally, every CSS in style tag will be applied in every components. If you want to scope your CSS to be used just in one component, you can just add `scope` in style tag like `<style scoped>...</style>`.
+
+Vue do this by adding random data attribute to both HTML element and CSS class, id or element name.
+
+Best practice: add global css in assets/global.css to separate the components css and global css. Then, import global css in main.js.
+
+## Props
+
+Passing props from parent component to child component with following code:
+
+```vue
+<Modal :header="header" :text="text" data="some data" />
+```
+
+## Emitting Custom Events
+
+This is the way to pass function from parent component to child component. Using `$emit()` to refer to function props from parent.
+
+```javascript
+// App.vue
+<Modal :header="header" :text="text" @close="toggleModal" />
+```
+
+```javascript
+// Modal.vue
+<template>
+  <div class="backdrop" @click="closeModal">
+    <div class="modal">
+      <h3>{{ header }}</h3>
+      <p>{{ text }}</p>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Modal',
+  props: ['header', 'text'],
+  methods: {
+    closeModal() {
+      this.$emit('close');
+    },
+  },
+};
+</script>
+```
+
+## Click Event Modifier
+
+Specify the event more like `@click.right` means the event will works with right click only, it will not works with left click.
+
+- `@click.shift` - click + hold shift click
+- `@click.alt` - click + hold alt click
+- `@click.self` - only element itself will be applied the event, the element inside will not be applied.
+
+## Slots
+
+Slots is similar to children props in React. When you want to pass HTML element to the child component.
+
+## Fix Vue problems
+
+1. The template root requires exactly on element
+
+```
+[vue/no-multiple-template-root]
+The template root requires exactly one element
+```
+
+This happens because you open multiple projects in one workplace which means you don't open Vue project in the root of the workplace. How this problem occur? - maybe eslint-plugin-vue cannot be used when you open multiple projects.
