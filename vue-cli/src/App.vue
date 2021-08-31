@@ -1,6 +1,6 @@
 <template>
   <h1>{{ title }}</h1>
-  <input type="text" ref="name" />
+  <!-- <input type="text" ref="name" />
   <button @click="handleClick">Change Title</button>
   <teleport to=".modals" v-if="showModal">
     <Modal @close="toggleModal">
@@ -12,19 +12,21 @@
     </Modal>
   </teleport>
   <button @click="toggleModal">open modal</button>
-  <hr />
+  <hr /> -->
   <ShowLifeCycle />
+  <SignupForm />
 </template>
 
 <script>
-import Modal from './components/Modal.vue';
 import ShowLifeCycle from './components/ShowLifeCycle.vue';
+import SignupForm from './components/SignupForm.vue';
 
 export default {
   name: 'App',
   components: {
-    Modal,
+    // Modal,
     ShowLifeCycle,
+    SignupForm,
   },
   data() {
     return {
