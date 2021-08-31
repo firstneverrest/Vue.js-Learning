@@ -154,7 +154,7 @@ Vue directives is a special word that can only appear in the form of a prefixed 
 </element>
 ```
 
-### Directives List
+### Directives Mouse List
 
 - `v-on:click` or `@click` - when click the element
 - `v-on:mouseover` or `@mouseover` - when cursor mouse is entered the element
@@ -584,11 +584,13 @@ You can name the slot to make the child components can choose what slot they wan
 Sometimes, you may want to render component out of the `<div id="app"></div>` like modal. You can use teleport feature.
 
 ```html
+<!-- index.html -->
 <div id="app"></div>
 <div class="modals"></div>
 ```
 
 ```vue
+// App.vue
 <template>
   ...
   <teleport to=".modals" v-if="showModal">
@@ -636,6 +638,36 @@ export default {
   },
   unmounted() {
     console.log('component after unmounted');
+  },
+};
+</script>
+```
+
+## Forms & Inputs
+
+`v-model` directive can be used to handle form by enabling you to bind the variable in data to the input value. This directive create two-direction binding.
+
+```vue
+// SignupForm.vue
+<template>
+  <form>
+    <label>Email: </label>
+    <input type="email" required v-model="email" />
+
+    <label>Password: </label>
+    <input type="password" required v-model="password" />
+  </form>
+  <p>Email: {{ email }}</p>
+  <p>Password: {{ password }}</p>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      email: '',
+      password: '',
+    };
   },
 };
 </script>
