@@ -603,6 +603,44 @@ Sometimes, you may want to render component out of the `<div id="app"></div>` li
 </template>
 ```
 
+## Lifecycle Hooks
+
+![image](https://v3.vuejs.org/images/lifecycle.svg)
+
+From: [Vue Lifecycle Hooks](https://v3.vuejs.org/guide/instance.html#lifecycle-diagram)
+Lifecycle hooks can make you choose when to run code such as when to fetch the data from the server? or when the component is created, what it should do? Vue lifecycle hooks can be used as below:
+
+```vue
+<script>
+export default {
+  beforeCreate() {
+    console.log('component before created');
+  },
+  created() {
+    console.log('component created');
+  },
+  beforeMount() {
+    console.log('component before mounted');
+  },
+  mounted() {
+    console.log('component mounted');
+  },
+  beforeUpdate() {
+    console.log('component before updated');
+  },
+  updated() {
+    console.log('component updated');
+  },
+  beforeUnmount() {
+    console.log('component before unmounted');
+  },
+  unmounted() {
+    console.log('component after unmounted');
+  },
+};
+</script>
+```
+
 ## Fix Vue problems
 
 1. The template root requires exactly on element
@@ -612,4 +650,4 @@ Sometimes, you may want to render component out of the `<div id="app"></div>` li
 The template root requires exactly one element
 ```
 
-This happens because you open multiple projects in one workplace which means you don't open Vue project in the root of the workplace. How this problem occur? - maybe eslint-plugin-vue cannot be used when you open multiple projects.
+This happens because you open multiple projects in one workplace which means you don't open Vue project in the root of the workplace. How this problem occur? - maybe eslint-plugin-vue cannot be used when you open multiple projects or you are still using Vue version 2 not version 3.
