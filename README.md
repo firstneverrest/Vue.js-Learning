@@ -544,6 +544,65 @@ Specify the event more like `@click.right` means the event will works with right
 
 Slots is similar to children props in React. When you want to pass HTML element to the child component.
 
+```html
+<!-- App.vue -->
+<Modal @close="toggleModal">
+  <h3>{{ header }}</h3>
+  <p>{{ text }}</p>
+</Modal>
+```
+
+```html
+<!-- Modal.vue -->
+<div class="modal">
+  <slot></slot>
+</div>
+```
+
+You can name the slot to make the child components can choose what slot they want to apply.
+
+```html
+<!-- App.vue -->
+<div class="modal">
+  <slot name="links"></slot>
+</div>
+```
+
+```html
+<!-- Modal.vue -->
+<Modal @close="toggleModal">
+  <template v-slot:links>
+    <a href="#">more info</a>
+  </template>
+  <h3>{{ header }}</h3>
+  <p>{{ text }}</p>
+</Modal>
+```
+
+## Teleport
+
+Sometimes, you may want to render component out of the `<div id="app"></div>` like modal. You can use teleport feature.
+
+```html
+<div id="app"></div>
+<div class="modals"></div>
+```
+
+```vue
+<template>
+  ...
+  <teleport to=".modals" v-if="showModal">
+    <Modal @close="toggleModal">
+      <template v-slot:links>
+        <a href="#">more info</a>
+      </template>
+      <h3>{{ header }}</h3>
+      <p>{{ text }}</p>
+    </Modal>
+  </teleport>
+</template>
+```
+
 ## Fix Vue problems
 
 1. The template root requires exactly on element
