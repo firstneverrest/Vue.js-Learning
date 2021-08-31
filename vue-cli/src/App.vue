@@ -2,9 +2,15 @@
   <h1>{{ title }}</h1>
   <input type="text" ref="name" />
   <button @click="handleClick">Change Title</button>
-  <div v-if="showModal">
-    <Modal :header="header" :text="text" @close="toggleModal" />
-  </div>
+  <teleport to=".modals" v-if="showModal">
+    <Modal @close="toggleModal">
+      <template v-slot:links>
+        <a href="#">more info</a>
+      </template>
+      <h3>{{ header }}</h3>
+      <p>{{ text }}</p>
+    </Modal>
+  </teleport>
   <button @click="toggleModal">open modal</button>
 </template>
 
