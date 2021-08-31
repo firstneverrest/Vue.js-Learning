@@ -12,15 +12,19 @@
     </Modal>
   </teleport>
   <button @click="toggleModal">open modal</button>
+  <hr />
+  <ShowLifeCycle />
 </template>
 
 <script>
 import Modal from './components/Modal.vue';
+import ShowLifeCycle from './components/ShowLifeCycle.vue';
 
 export default {
   name: 'App',
   components: {
     Modal,
+    ShowLifeCycle,
   },
   data() {
     return {
