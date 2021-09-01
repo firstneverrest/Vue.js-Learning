@@ -673,6 +673,11 @@ export default {
 </script>
 ```
 
+## Vue Router
+
+Vue Router is Similar to React router concept. When create a new project via Vue CLI, you can choose manually select features
+-> choose Router -> Use history mode for router (Yes)
+
 ## Fix Vue problems
 
 1. The template root requires exactly on element
