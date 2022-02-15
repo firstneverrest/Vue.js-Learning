@@ -7,7 +7,7 @@ The Progressive JavaScript/TypeScript Framework. Vue is used to create dynamic &
 1. Create a whole website with multiple pages & components
 2. Composition API - improves on reusability, organization & readability
 3. Multiple root elements - unlike React, Vue can has many root elements side-by-side in a component
-4. Teleport component - render content from one component in a different place in a DOM which can used to create modal
+4. Teleport component - render content from one component in a different place in a DOM which can be used to create modal
 5. Suspense component - handle asynchronous components easily and can provide fall-back content like spinner until data is loaded
 6. TypeScript support
 7. Vue can be used to create two things in website
@@ -251,6 +251,7 @@ Use `v-if`, `v-else` and `v-show` to do conditional rendering.
 - `v-if` - if the condition is true, it will show the element inside of it. If the condition is false, it will remove the element out of the DOM.
 - `v-else` - use with `v-if`, if the condition of `v-if` is false, `v-else` will operate.
 - `v-show` - like `v-if` but it will use CSS to operate. If the condition is true, the element inside will be display block. On the other hand, the element inside will be display none, if the condition is false.
+- `v-html` - in order to output real HTML not just string.
 
 ```html
 <div id="app">
@@ -334,10 +335,14 @@ Using `v-for` directive to do outputting lists.
 
 In order to make attribute in HTML can change dynamically, you can use `v-bind:attribute` to do attribute binding.
 
-For example: `v-bind:href` - bind with href attribute in `<a></a>`
+For example: `v-bind:href` - bind with href attribute in `<a></a>` or you can just use a shorthand`:href`.
 
 ```html
 <a v-bind:href="url">visit website</a>
+
+<!-- or -->
+
+<a :href="url">visit website</a>
 ```
 
 ## Dynamic classes
