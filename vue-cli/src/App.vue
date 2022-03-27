@@ -1,6 +1,7 @@
 <template>
-  <h1>{{ title }}</h1>
-  <!-- <input type="text" ref="name" />
+  <div class="container">
+    <h1>{{ title }}</h1>
+    <!-- <input type="text" ref="name" />
   <button @click="handleClick">Change Title</button>
   <teleport to=".modals" v-if="showModal">
     <Modal @close="toggleModal">
@@ -13,8 +14,9 @@
   </teleport>
   <button @click="toggleModal">open modal</button>
   <hr /> -->
-  <ShowLifeCycle />
-  <SignupForm />
+    <ShowLifeCycle />
+    <SignupForm />
+  </div>
 </template>
 
 <script>
@@ -52,5 +54,10 @@ export default {
 <style scoped>
 .active {
   border: 2px solid #fcba03;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
 }
 </style>

@@ -1,10 +1,12 @@
 <template>
-  <h3>Lifecycle Hooks show case</h3>
-  <div v-if="showBox" class="center">
-    <div class="box"></div>
-  </div>
-  <button @click="closeBox">Close Box</button>
-  <button @click="openBox">Open Box</button>
+  <section>
+    <h3>Lifecycle Hooks show case</h3>
+    <div v-if="showBox" class="center">
+      <div class="box"></div>
+    </div>
+    <button @click="closeBox">Close Box</button>
+    <button @click="openBox">Open Box</button>
+  </section>
 </template>
 
 <script>
