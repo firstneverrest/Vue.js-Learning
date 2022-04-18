@@ -16,7 +16,7 @@ The Progressive JavaScript/TypeScript Framework. Vue is used to create dynamic &
 
 ## Installation and setup
 
-### Use Vue with CDN
+### Use Vue with CDN (Widget)
 
 1. Create index.html
 2. Add this CDN code in index.html (vue@next means version will always be latest version, you can define specific version with vue@3.0 or other)
@@ -28,7 +28,7 @@ The Progressive JavaScript/TypeScript Framework. Vue is used to create dynamic &
 3. Create external JavaScript file
 4. Start create Vue app in the JS file
 
-### Vue CLI
+### Vue CLI (SPA)
 
 Use to create single page application which similar to create-react-app. It has more benefits as following:
 
@@ -612,8 +612,6 @@ Sometimes, you may want to render component out of the `<div id="app"></div>` li
 
 ## Lifecycle Hooks
 
-![image](https://v3.vuejs.org/images/lifecycle.svg)
-
 From: [Vue Lifecycle Hooks](https://v3.vuejs.org/guide/instance.html#lifecycle-diagram)
 Lifecycle hooks can make you choose when to run code such as when to fetch the data from the server? or when the component is created, what it should do? Vue lifecycle hooks can be used as below:
 
@@ -676,6 +674,16 @@ export default {
   },
 };
 </script>
+```
+
+### Prevent Default of Form Submitting
+
+Vue has another better alternative to JavaScript built-in function or `event.preventDefault()` which is event modifier.
+
+```vue
+<template>
+  <form v-on:submit.prevent="submitForm">...</form>
+</template>
 ```
 
 ## Vue Router
