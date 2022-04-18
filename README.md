@@ -388,6 +388,8 @@ Use `v-bind:class` or `:class` to defined dynamic classes
 
 computed properties is similar to data properties but it can be computed before the data will be used. If the data in data properties change, the method in computed properties will change as well which depend on that data.
 
+Computed properties help preventing Vue re-render unrelated content from methods rendering.
+
 ```html
 <ul>
   <li v-for="book in filteredBooks">
@@ -404,6 +406,45 @@ computed properties is similar to data properties but it can be computed before 
     },
   },
 ```
+
+## Watchers
+
+Watchers are used to trigger a function whenever a reactive property changes. You can use when you need to perform side effects in reaction to state changes.
+
+```javascript
+  data() {
+    return {
+      question: '',
+      answer: 'Questions usually contain a question mark. ;-)'
+    }
+  },
+  watch: {
+    // whenever question changes, this function will run
+    question(newQuestion, oldQuestion) {
+      if (newQuestion.indexOf('?') > -1) {
+        this.getAnswer()
+      }
+    }
+  },
+  methods: {
+    async getAnswer() {
+      this.answer = 'Thinking...'
+      try {
+        const res = await fetch('https://yesno/api')
+        this.answer = (await res.json()).answer
+      } catch (error) {
+        this.answer = 'Error! Could not reach the API. ' + error
+      }
+    }
+  }
+```
+
+## Methods vs Computed Properties vs Watchers
+
+| Methods                                                       | Computed Properties                                                                                    | Watchers                                                |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| use with event binding or data binding                        | use with data binding                                                                                  | allow running any code in reaction to some changed data |
+| method is executed for every re-render cycle of the component | only re-evaluated if one of their used values changed and suitable for data that depends on other data | not great when the task is depend on many data          |
 
 ## Folder Structure in Vue CLI
 
