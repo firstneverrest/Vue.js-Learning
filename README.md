@@ -249,8 +249,9 @@ app.mount('#app');
 Use `v-if`, `v-else` and `v-show` to do conditional rendering.
 
 - `v-if` - if the condition is true, it will show the element inside of it. If the condition is false, it will remove the element out of the DOM.
+- `v-else-if` - means else if in programming language.
 - `v-else` - use with `v-if`, if the condition of `v-if` is false, `v-else` will operate.
-- `v-show` - like `v-if` but it will use CSS to operate. If the condition is true, the element inside will be display block. On the other hand, the element inside will be display none, if the condition is false.
+- `v-show` - like `v-if` but it will use CSS to operate. If the condition is true, the element inside will be display block. On the other hand, the element inside will be display none, if the condition is false (the elements that display none are not removed from the DOM).
 - `v-html` - in order to output real HTML not just string.
 
 ```html
@@ -293,12 +294,12 @@ app.mount('#app');
 
 ## Outputting Lists
 
-Using `v-for` directive to do outputting lists.
+Using `v-for` directive to do outputting lists and also loop through object.
 
 ```html
 <h1>Books</h1>
 <ul>
-  <li v-for="book in books">
+  <li v-for="(book, index) in books">
     <h3>{{ book.title }}</h3>
     <p>{{ book.author }}</p>
     <p>{{ book.age }}</p>
@@ -331,6 +332,18 @@ Using `v-for` directive to do outputting lists.
   },
 ```
 
+```html
+<!-- loop through object -->
+<ul v-else>
+  <li v-for="(value, key, index) in {name: 'First', age: 21}" :key="some_id">
+    {{ key }}: {{ value }} - {{ index }}
+  </li>
+</ul>
+
+<!-- loop through array of number -->
+<li v-for="num in 20">{{ num }}</li>
+```
+
 ## Attribute binding
 
 In order to make attribute in HTML can change dynamically, you can use `v-bind:attribute` to do attribute binding.
@@ -352,7 +365,9 @@ Use `v-bind:class` or `:class` to defined dynamic classes
 ```html
 <ul>
   <li v-for="book in books">
-    <h3 v-bind:class="{ published: book.isPublished }">{{ book.title }}</h3>
+    <h3 v-bind:class="{ published: book.isPublished, active: book.isActive }">
+      {{ book.title }}
+    </h3>
     <p>{{ book.author }}</p>
   </li>
 </ul>
@@ -367,21 +382,92 @@ Use `v-bind:class` or `:class` to defined dynamic classes
           author: 'Chitsanupong',
           age: 21,
           isPublished: true,
+          isActive: true
         },
         {
           title: 'The Abyssal World',
           author: 'Carlos',
           age: 18,
           isPublished: true,
+          isActive: false
         },
         {
           title: 'The Motivation of Life',
           author: 'Mortos',
           age: 26,
           isPublished: false,
+          isActive: false
         },
       ],
     };
+```
+
+or the better way with computed properties
+
+```html
+<ul>
+  <li v-for="book in books">
+    <h3 :class="bookClasses">{{ book.title }}</h3>
+    <p>{{ book.author }}</p>
+  </li>
+</ul>
+```
+
+```javascript
+ data() {
+    return {
+      books: [
+        {
+          title: 'The Great Empire',
+          author: 'Chitsanupong',
+          age: 21,
+          isPublished: true,
+          isActive: true
+        },
+        {
+          title: 'The Abyssal World',
+          author: 'Carlos',
+          age: 18,
+          isPublished: true,
+          isActive: false
+        },
+        {
+          title: 'The Motivation of Life',
+          author: 'Mortos',
+          age: 26,
+          isPublished: false,
+          isActive: false
+        },
+      ],
+    };
+ },
+  computed: {
+    bookClasses() {
+      return { published: this.book.isPublished, active: this.book.isActive }
+    }
+  }
+```
+
+### Dynamic Classes with Array Syntax
+
+```html
+<!-- old -->
+<ul>
+  <li v-for="book in books">
+    <h3 class="book" :class="{active: isPublished}">{{ book.title }}</h3>
+    <p>{{ book.author }}</p>
+  </li>
+</ul>
+```
+
+```html
+<!-- better way -->
+<ul>
+  <li v-for="book in books">
+    <h3 :class="['book', {active: isPublished}]">{{ book.title }}</h3>
+    <p>{{ book.author }}</p>
+  </li>
+</ul>
 ```
 
 ## Computed Properties
