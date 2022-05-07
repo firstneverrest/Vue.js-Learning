@@ -144,6 +144,60 @@ const app = Vue.createApp({
 app.mount('#app');
 ```
 
+3. Create Vue component in JavaScript
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/vue@next"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <title>Vue Test</title>
+  </head>
+  <body>
+    <div class="container">
+        <ul>
+          <user-list />
+          <user-list />
+          <user-list />
+        </ul>
+      </section>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
+
+```
+
+```js
+app.component('user-list', {
+  template: `
+  <li
+  >
+    <p>{{ user }}</p>
+    <input type="text" @click.stop />
+    <p>{{ isChecked }}</p>
+    <button @click="check">Check</button>
+  </li>
+  `,
+  data() {
+    return {
+      isChecked: false,
+      user: '',
+    };
+  },
+  methods: {
+    check() {
+      this.isChecked = !this.isChecked;
+    },
+  },
+});
+```
+
 ## Directives
 
 Vue directives is a special word that can only appear in the form of a prefixed HTML attribute to add more functionality. For example: v-on:click, @click (You can use either v-on: or @ to refer to Vue directive)
