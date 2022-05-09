@@ -454,6 +454,7 @@ Use `v-bind:class` or `:class` to defined dynamic classes
         },
       ],
     };
+ }
 ```
 
 or the better way with computed properties
@@ -640,6 +641,14 @@ export default {
 </style>
 ```
 
+## Scoped & Global CSS
+
+Generally, every CSS in style tag will be applied in every components. If you want to scope your CSS to be used just in one component, you can just add `scope` in style tag like `<style scoped>...</style>`.
+
+Vue do this by adding random data attribute to both HTML element and CSS class, id or element name.
+
+Best practice: add global css in assets/global.css to separate the components css and global css. Then, import global css in main.js.
+
 ## Template refs
 
 allow to select HTML element in DOM like getElement in JavaScript.
@@ -667,22 +676,116 @@ export default {
     },
   },
 };
+</script>
 ```
-
-## Scoped & Global CSS
-
-Generally, every CSS in style tag will be applied in every components. If you want to scope your CSS to be used just in one component, you can just add `scope` in style tag like `<style scoped>...</style>`.
-
-Vue do this by adding random data attribute to both HTML element and CSS class, id or element name.
-
-Best practice: add global css in assets/global.css to separate the components css and global css. Then, import global css in main.js.
 
 ## Props
 
 Passing props from parent component to child component with following code:
 
 ```vue
+<!-- parent -->
 <Modal :header="header" :text="text" data="some data" />
+
+<!-- child -->
+<script>
+export default {
+  name: 'Modal',
+  props: ['header', 'text'],
+  methods: {
+    closeModal() {
+      this.$emit('close');
+    },
+  },
+};
+</script>
+```
+
+You can validate props by defining type of the props
+
+```vue
+<script>
+export default {
+  name: 'Modal',
+  props: {
+    title: {
+      type: String,
+      default: 'My first Vue App',
+      required: true,
+    },
+    name: String,
+    emailAddress: String,
+    age: {
+      type: Number,
+      required: true,
+      validator: (value) => {
+        return value.length > 0;
+      },
+    },
+  },
+  methods: {
+    closeModal() {
+      this.$emit('close');
+    },
+  },
+};
+</script>
+```
+
+Very props that be passed to child component will always be string. Therefore, you need to use `v-bind` to interpret as an another type that you define in validation props and also turns prop to dynamic prop value.
+
+```vue
+<template>
+  <div>
+    <user
+      v-for="user in users"
+      :key="user.id"
+      :title="user.title"
+      :name="user.name"
+      :email-address="user.email"
+      :age="user.age"
+    ></user>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'App',
+  components: {},
+  data() {
+    return {
+      users: [
+        {
+          id: 1,
+          title: 'Life at Finnomena',
+          name: 'Carlos',
+          email: 'first@finnomena.com',
+          age: 22,
+        },
+        {
+          id: 2,
+          title: 'A day in the life of a Software Engineer (Finnomena)',
+          name: 'Carlos',
+          email: 'first@finnomena.com',
+          age: 24,
+        },
+        {
+          id: 3,
+          title: 'Agile and Scrum',
+          name: 'Carlos',
+          email: 'first@finnomena.com',
+          age: 25,
+        },
+      ],
+    };
+  },
+  methods: {
+    handleClick() {
+      this.title = 'Changed title';
+    },
+  },
+};
+</script>
 ```
 
 ## Emitting Custom Events
@@ -717,6 +820,10 @@ export default {
 };
 </script>
 ```
+
+## Fallthrough Attributes
+
+Fallthrough attribute is an attribute or event listener which is passed to a child component but not explicitly declared in the receiving component's props or emits.
 
 ## Click Event Modifier
 
