@@ -270,6 +270,14 @@ methods: {
 }
 ```
 
+## Click Event Modifier
+
+Specify the event more like `@click.right` means the event will works with right click only, it will not works with left click.
+
+- `@click.shift` - click + hold shift click
+- `@click.alt` - click + hold alt click
+- `@click.self` - only element itself will be applied the event, the element inside will not be applied.
+
 ## Method
 
 Instead of write JS code directly in `v-on:click`, you can write in JS file instead.
@@ -825,13 +833,70 @@ export default {
 
 Fallthrough attribute is an attribute or event listener which is passed to a child component but not explicitly declared in the receiving component's props or emits.
 
-## Click Event Modifier
+## Provide & Inject
 
-Specify the event more like `@click.right` means the event will works with right click only, it will not works with left click.
+Provide and Inject are used to pass data directly from the parent to a child component without passing through other components. Therefore, you can use provide & inject instead of emit.
 
-- `@click.shift` - click + hold shift click
-- `@click.alt` - click + hold alt click
-- `@click.self` - only element itself will be applied the event, the element inside will not be applied.
+```vue
+<!-- Parent -->
+<script>
+export default {
+  name: 'App',
+  components: {},
+  data() {
+    return {
+      users: [
+        {
+          id: 1,
+          title: 'Life at Finnomena',
+          name: 'Carlos1',
+          email: 'first1@finnomena.com',
+          age: 22,
+        },
+        {
+          id: 2,
+          title: 'A day in the life of a Software Engineer (Finnomena)',
+          name: 'Carlos2',
+          email: 'first2@finnomena.com',
+          age: 24,
+        },
+        {
+          id: 3,
+          title: 'Agile and Scrum',
+          name: 'Carlos3',
+          email: 'first3@finnomena.com',
+          age: 25,
+        },
+      ],
+    };
+  },
+  provide() {
+    return {
+      users: this.users,
+    };
+  },
+};
+</script>
+
+<!-- Child -->
+<template>
+  <div>
+    <h1>Users</h1>
+    <div v-for="user in users" :key="user.id">
+      <p>{{ user.name }}</p>
+      <p>{{ user.email }}</p>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  inject: ['users'],
+};
+</script>
+
+<style></style>
+```
 
 ## Slots
 
