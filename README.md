@@ -898,9 +898,14 @@ export default {
 <style></style>
 ```
 
+## Global and Local Component
+
+global component - register in main.js and can be used everywhere like template. The drawback of this kind of registration are web browser need to load all global component in once and the name of components in main.js file would be really huge and doesn't know where it be used.
+local component - a better way to register a component when the component is used only in a few component.
+
 ## Slots
 
-Slots is similar to children props in React. When you want to pass HTML element to the child component.
+Slots is similar to children props in React. When you want to pass HTML element to the child component. Slots are very useful when use a create wrapper component and you would like to pass children HTML props/element into the wrapper component.
 
 ```html
 <!-- App.vue -->
@@ -923,6 +928,7 @@ You can name the slot to make the child components can choose what slot they wan
 <!-- App.vue -->
 <div class="modal">
   <slot name="links"></slot>
+  <slot name="content"></slot>
 </div>
 ```
 
@@ -934,12 +940,69 @@ You can name the slot to make the child components can choose what slot they wan
   </template>
   <h3>{{ header }}</h3>
   <p>{{ text }}</p>
+  <!-- slot shorthand: #slotName -->
+  <template #content>
+    <p>some content</p>
+  </template>
 </Modal>
+```
+
+Tip: The style of slot should be in the target component not the parent that send slot template into a child component.
+
+### Scoped Slot
+
+```vue
+<!-- single slot -->
+<template>
+  <div>
+    <User #body="bodyProps">
+      <p>This is a body slot</p>
+      <p>{{ bodyProps.account }}</p>
+    </User>
+  </div>
+</template>
+
+<!-- multiple slots -->
+<template>
+  <div>
+    <User>
+      <template #body="bodyProps">
+        <p>This is a body slot</p>
+        <p>{{ bodyProps.account }}</p>
+      </template>
+      <template #footer="footerProps">
+        <p>This is a footer slot</p>
+        <p>{{ footerProps.contact }}</p>
+      </template>
+    </User>
+  </div>
+</template>
+```
+
+```vue
+<template>
+  <slot name="body" :account="account"> </slot>
+</template>
+```
+
+## Dynamic Component
+
+An alternative to `v-if` when you would like to conditionally render component. In addition, `<keep-alive><keep-alive>` can be used to tell Vue that components in the tag should not be removed entirely (data lost) but state should be cached behind the scenes.
+
+```vue
+<template>
+  <keep-alive>
+    <component :is="componentName"></component>
+  <keep-alive>
+</template>
 ```
 
 ## Teleport
 
 Sometimes, you may want to render component out of the `<div id="app"></div>` like modal. You can use teleport feature.
+
+- <teleport to=".modals" v-if="showModal"></teleport> - render in element that has modals class.
+- <teleport to="body" v-if="showModal"></teleport> - render in the body tag.
 
 ```html
 <!-- index.html -->
