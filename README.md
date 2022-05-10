@@ -1064,7 +1064,12 @@ export default {
 
 ## Forms & Inputs
 
-`v-model` directive can be used to handle form by enabling you to bind the variable in data to the input value. This directive create two-direction binding.
+`v-model` directive can be used to handle form by enabling you to bind the variable in data to the input value. This directive create two-direction binding. The benefits of `v-model` are automatic handling number data type and two-direction binding which are not available by default in custom event handler.
+`v-model` modifiers:
+
+- lazy - listen to every change events (by default)
+- number - typecast as a Number
+- trim - trim user input whitespace (no leading or trailing whitespace)
 
 ```vue
 // SignupForm.vue
@@ -1100,6 +1105,62 @@ Vue has another better alternative to JavaScript built-in function or `event.pre
 <template>
   <form v-on:submit.prevent="submitForm">...</form>
 </template>
+```
+
+## Fetching Data
+
+```vue
+<template>
+  <div>
+    <h1>User</h1>
+    <p v-if="isLoading">Loading...</p>
+    <p v-else-if="!isLoading && errorMsg">{{ errorMsg }}</p>
+    <p v-else-if="!isLoading && (!users || users.length === 0)">
+      No Users Found.
+    </p>
+    <ul v-else-if="!isLoading && users && users.length > 0">
+      <li v-for="user in users" :key="user.id">
+        {{ user.name }} - {{ user.email }}
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      users: [],
+      isLoading: true,
+      errorMsg: null,
+    };
+  },
+  methods: {
+    getUsers() {
+      fetch('https://jsonplaceholder.typicode.com/user')
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          } else {
+            throw new Error('Something went wrong on api server!');
+          }
+        })
+        .then((data) => {
+          this.users = data;
+          this.isLoading = false;
+        })
+        .catch((error) => {
+          this.errorMsg = error.message;
+          this.isLoading = false;
+          console.log(error);
+        });
+    },
+  },
+  mounted() {
+    this.getUsers();
+  },
+};
+</script>
 ```
 
 ## Vue Router
