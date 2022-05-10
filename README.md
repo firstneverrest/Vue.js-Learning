@@ -1168,6 +1168,219 @@ export default {
 Vue Router is Similar to React router concept. When create a new project via Vue CLI, you can choose manually select features
 -> choose Router -> Use history mode for router (Yes)
 
+```js
+// main.js
+import { createApp } from 'vue';
+import { createRouter, createWebHistory } from 'vue-router';
+import App from './App.vue';
+import Home from './pages/Home.vue';
+import './assets/global.css';
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    { path: '/', component: Home },
+    { path: '/about', component: () => import('./pages/About.vue') },
+  ],
+  linkActiveClass: 'active-link', // adding class when the link is active
+});
+
+const app = createApp(App);
+
+app.use(router);
+
+app.mount('#app');
+```
+
+Use `<router-view />` to tell vue router know where to render the component.
+
+```vue
+<!-- App.vue -->
+<template>
+  <Navbar />
+  <router-view />
+</template>
+```
+
+Use `<router-link>` to navigate the page like `<a>` tag.
+
+```vue
+<!-- Navbar.vue -->
+<template>
+  <li>
+    <router-link to="/">Home</router-link>
+  </li>
+  <li>
+    <router-link to="/about">About</router-link>
+  </li>
+</template>
+```
+
+### Programmatic navigation
+
+- `this.$router.push('/about');` to navigate the page by path.
+- `this.$router.forward();` to navigate forward.
+- `this.$router.back();` to navigate back.
+- `this.$route.path;` get current path.
+- `this.$route.params.id;` get the id param.
+- `this.$route.query;` get the query.
+
+### Route Params
+
+```js
+import { createApp } from 'vue';
+import { createRouter, createWebHistory } from 'vue-router';
+import App from './App.vue';
+import Home from './pages/Home.vue';
+import About from './pages/About.vue';
+import User from './components/User.vue';
+import './assets/global.css';
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    { path: '/', component: Home, alias: ['/home', '/homepage'] }, // alias (not redirect)
+    { path: '/about', component: About },
+    { path: '/users/:userId', component: User, props: true }, // send params via props
+    { path: '/:notFound(.*)', redirect: '/users/1' }, // not match any route
+  ],
+  linkActiveClass: 'active-link',
+});
+
+const app = createApp(App);
+
+app.use(router);
+
+app.mount('#app');
+```
+
+### Updating Params Data with Watcher
+
+Dynamic route params cause some weird behavior when change to the path with params because the router will not re-create the component. Therefore, you need to use a watcher to update the params.
+
+### Nested Route
+
+```js
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    {
+      path: '/users',
+      component: User,
+      children: [
+        { path: 'members', component: Test, props: true },
+        { path: ':userId', component: Test, props: true },
+      ],
+    },
+  ],
+  linkActiveClass: 'active-link',
+});
+```
+
+### More with named routes
+
+```js
+const routes = [
+  {
+    path: '/user/:username',
+    name: 'user',
+    component: User,
+  },
+];
+```
+
+```js
+router.push({
+  name: 'user',
+  params: { username: 'erina' },
+  query: { userid: '123' },
+});
+```
+
+### Multiple Router View
+
+```js
+const routes = [
+  {
+    path: '/user/:username',
+    name: 'user',
+    components: { default: UsersList, footer: UsersFooter },
+  },
+];
+```
+
+```
+<router-view name="footer"></router-view>
+```
+
+### Controlling Scroll Behavior
+
+When you change route with router-link, you could see that the page position is still the same not go up to the top. So, you can change the scroll behavior in createRouter().
+
+```js
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    { path: '/', component: Home, alias: ['/home', '/homepage'] },
+    { path: '/about', component: About },
+    { path: '/:notFound(.*)', redirect: '/' },
+  ],
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    }
+    return { left: 0, top: 0 };
+  },
+});
+```
+
+### Navigation Guards
+
+```js
+const router = createRouter({
+  routes: [
+    { path: '/', name: 'home', component: Home, alias: ['/home', '/homepage'] },
+    {
+      path: '/about',
+      name: 'about',
+      meta: { isAuth: true }
+      component: About,
+      beforeEnter(to, from, next) {
+        console.log('beforeEnter');
+        next();
+      },
+    },
+  ],
+});
+
+router.beforeEach((to, from, next) => {
+  console.log(from, to);
+  if (to.path === '/about' && to.meta.!isAuth) {
+    next({ name: 'home' });
+  } else {
+    next();
+  }
+});
+
+router.afterEach((to, from) => {
+  // sending analytics data
+});
+```
+
+another guard that can be used in a component.
+
+- `beforeRouteEnter(to, from, next)` - authentication
+- `beforeRouteLeave(to, from, next)` - prevent user unsaved action before leaving page
+
+Running order from home to about route.
+
+1. beforeEach
+2. beforeRouteEnter
+3. afterEach
+4. mounted
+5. beforeRouteLeave
+6. unmounted
+
 ## Fix Vue problems
 
 1. The template root requires exactly on element

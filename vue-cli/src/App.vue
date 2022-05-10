@@ -1,25 +1,15 @@
 <template>
   <div>
-    <user
-      v-for="user in users"
-      :key="user.id"
-      :id="user.id"
-      :title="user.title"
-      :name="user.name"
-      :email-address="user.email"
-      :age="user.age"
-      @change-name="changeName"
-      @toggle="changeButton"
-    ></user>
-    <new-user @add-user="addUser"></new-user>
-    <show-user></show-user>
+    <router-view />
+    <Navbar />
   </div>
 </template>
 
 <script>
+import Navbar from './components/Navbar.vue';
 export default {
   name: 'App',
-  components: {},
+  components: { Navbar },
   data() {
     return {
       users: [
@@ -52,16 +42,7 @@ export default {
       users: this.users,
     };
   },
-  methods: {
-    changeName(id) {
-      const identifiedUser = this.users.find((user) => user.id === id);
-      identifiedUser.name = 'Neverrest';
-    },
-    addUser(user) {
-      console.log(this.users);
-      this.users.push(user);
-    },
-  },
+  methods: {},
 };
 </script>
 
