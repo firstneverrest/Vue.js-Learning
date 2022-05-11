@@ -1381,6 +1381,160 @@ Running order from home to about route.
 5. beforeRouteLeave
 6. unmounted
 
+## Transition and Animation
+
+```vue
+<template>
+  <h1>Home Page</h1>
+  <p>Welcome to our Home</p>
+  <transition>
+    <div class="box" v-if="isAnimated"></div>
+  </transition>
+  <button @click="animate()">Animate</button>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      isAnimated: false,
+    };
+  },
+  methods: {
+    animate() {
+      this.isAnimated = !this.isAnimated;
+    },
+  },
+};
+</script>
+
+<style scoped>
+.box {
+  width: 100px;
+  height: 100px;
+  background: red;
+  margin: 2rem;
+}
+
+.v-enter-from {
+  opacity: 0;
+  transform: translateX(0);
+}
+
+.v-enter-active {
+  transition: all 1s ease-in-out;
+}
+
+.v-enter-to {
+  opacity: 1;
+  transform: translateX(100px);
+}
+
+.v-leave-from {
+  opacity: 1;
+  transform: translateX(100px);
+}
+
+.v-leave-active {
+  transition: all 1s ease-in-out;
+}
+
+.v-leave-to {
+  opacity: 0;
+  transform: translateX(0);
+}
+</style>
+```
+
+### Use your own animation keyframe.
+
+```css
+.v-enter-from {
+  /* opacity: 0;
+  transform: translateX(0); */
+}
+
+.v-enter-active {
+  /* transition: all 1s ease-in-out; */
+  animation: box-animation 2s ease-out;
+}
+
+.v-enter-to {
+  /* opacity: 1;
+  transform: translateX(100px); */
+}
+```
+
+### Use custom CSS class names
+
+Add parameter name in your transition tag.
+
+```vue
+<template>
+  <transition name="box-animate">
+    <div class="box" v-if="isAnimated"></div>
+  </transition>
+</template>
+
+<style>
+.box-animate-enter-active {
+  /* transition: all 1s ease-in-out; */
+  animation: box-animation 2s ease-out;
+}
+</style>
+```
+
+### Transitioning Between Multiple Elements
+
+```html
+<transition name="box-animate" mode="out-in">
+  <div class="box" v-if="isAnimated"></div>
+  <div class="box2" v-else></div>
+</transition>
+```
+
+### Animate Multiple Elements
+
+```vue
+<template>
+  <transition-group tag="ul" name="user">
+    <li v-for="user in users" :key="user.id" @click="removeUser(user.id)">
+      {{ user.title }}
+    </li>
+  </transition-group>
+</template>
+
+<style scoped>
+.user-enter-from {
+  opacity: 0;
+  transform: translateX(0);
+}
+
+.user-enter-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.user-enter-to {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.user-leave-from {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.user-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.user-leave-to {
+  opacity: 0;
+  transform: translateX(0);
+}
+</style>
+```
+
 ## Fix Vue problems
 
 1. The template root requires exactly on element
