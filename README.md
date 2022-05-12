@@ -1168,6 +1168,14 @@ export default {
 Vue Router is Similar to React router concept. When create a new project via Vue CLI, you can choose manually select features
 -> choose Router -> Use history mode for router (Yes)
 
+### Installation
+
+```
+npm i vue-router
+```
+
+### Get Started
+
 ```js
 // main.js
 import { createApp } from 'vue';
@@ -1534,6 +1542,304 @@ Add parameter name in your transition tag.
 }
 </style>
 ```
+
+## Vuex
+
+Vuex is a state management library for Vue. It serves as a centralized store for all components in an application which has data flow below:
+
+1. Vue component get user interaction
+2. Vue component send dispatch to actions
+3. Actions commit to mutations
+4. Mutations mutate state and save in a store
+5. State cause Vue components to re-render
+
+### Installation
+
+```
+npm i vuex
+```
+
+### Get Started
+
+```js
+// main.js
+import { createApp } from 'vue';
+import { createStore } from 'vuex';
+import App from './App.vue';
+import './assets/global.css';
+
+const app = createApp(App);
+
+const store = createStore({
+  state() {
+    return {
+      counter: 0,
+    };
+  },
+  mutations: {
+    // change data in state
+    increment(state) {
+      state.counter += 1;
+    },
+    increase(state, payload) {
+      state.counter += payload.value;
+    },
+  },
+  getters: {
+    // get state
+    getCounter(state) {
+      return state.counter;
+    },
+  },
+  actions: {
+    // run asynchronous code
+    increment(context, payload) {
+      context.commit('increment', payload);
+    },
+  },
+});
+
+app.use(store);
+
+app.mount('#app');
+```
+
+```vue
+<template>
+  <div>
+    <h1>Home Page</h1>
+    <p>Welcome to our Home</p>
+    <h3>{{ counter }}</h3>
+    <button @click="addOne">Add counter 1</button>
+    <input type="number" v-model="point" />
+    <button @click="addMany">Add Many</button>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      point: 0,
+    };
+  },
+  computed: {
+    counter() {
+      return this.$store.getters.getCounter;
+    },
+  },
+  methods: {
+    addOne() {
+      this.$store.commit('increment');
+    },
+    addMany() {
+      this.$store.commit('increase', { value: this.point });
+    },
+  },
+};
+</script>
+
+<style scoped></style>
+```
+
+### Mapper Helpers
+
+```vue
+<template>
+  <h3>{{ getCounter }}</h3>
+</template>
+
+<script>
+import { mapGetters } from 'vuex';
+
+export default {
+  computed: {
+    ...mapGetters(['getCounter']),
+  },
+};
+</script>
+```
+
+## Composition API
+
+Composition API is a set of APIs that allows importing functions instead of declaring options like data, computed, watchers, methods. It helps improving logic reuse and more flexible code organization.
+
+Options API => Composition API
+
+- data() => ref(), reactive()
+- methods: { name() {} } => function name() {}
+- computed: { val() } => const val = computed()
+- watch: {} => watch(dep, (val, oldV) => {})
+- provide: {}, inject: [] => provide(key, val), inject(key)
+- props: [] => props.key
+
+Additional Explanation
+
+- ref() - use with all kind of data
+- reactive() - only use with object
+- isRef() - check is that ref object is changeable or not
+- isReactive() - check is that reactive object is changeable or not
+- toRefs() - convert value to ref
+
+```vue
+<template>
+  <div>
+    <h1>Home Page</h1>
+    <p>Welcome to our Home</p>
+    <p>{{ username }}</p>
+    <input type="text" v-model="username" />
+  </div>
+</template>
+
+<script>
+import { ref, reactive, computed, watch } from 'vue';
+
+export default {
+  setup() {
+    // data
+    const username = ref('');
+    // const user = reactive({
+    //   name: 'Chitsanupong',
+    //   age: 21,
+    // });
+
+    // methods
+    function changeName() {
+      username.name = 'Neverrest';
+    }
+
+    // computed - if variable inside change, it will re-render
+    // cannot set value (read-only)
+    const computedName = computed(() => {
+      return username.name + 'new one';
+    });
+
+    watch(username, (newValue, oldValue) => {
+      console.log(newValue, oldValue);
+    });
+
+    return {
+      username,
+      changeName,
+      computedName,
+    };
+  },
+};
+</script>
+```
+
+How to use template ref in composition API
+
+```vue
+<template>
+  <div>
+    <h1>Home Page</h1>
+    <p>Welcome to our Home</p>
+    <p>{{ username }}</p>
+    <input type="text" ref="usernameInput" />
+    <button @click="setUsername">Set Username</button>
+  </div>
+</template>
+
+<script>
+import { ref } from 'vue';
+
+export default {
+  setup() {
+    const username = ref('');
+    const usernameInput = ref(null);
+
+    function setUsername() {
+      username.value = usernameInput.value.value;
+    }
+
+    return {
+      username,
+      usernameInput,
+      setUsername,
+    };
+  },
+};
+</script>
+```
+
+How to use props, emit, slot in Composition API
+
+```vue
+<!-- Home.vue -->
+<template>
+  <div>
+    <h1>Home Page</h1>
+    <p>Welcome to our Home</p>
+    <input type="text" v-model="username" />
+    <input type="text" v-model="password" />
+    <User :username="username" :password="password" />
+  </div>
+</template>
+
+<script>
+import { ref } from 'vue';
+import User from '../components/User.vue';
+
+export default {
+  components: {
+    User,
+  },
+  setup() {
+    const username = ref('');
+    const password = ref('');
+
+    return {
+      username,
+      password,
+    };
+  },
+};
+</script>
+```
+
+```vue
+<!-- User.vue -->
+<template>
+  <div>
+    <h2>Users</h2>
+    <p>{{ uName }}</p>
+  </div>
+</template>
+
+<script>
+import { computed } from 'vue';
+export default {
+  props: ['username', 'password'],
+  setup(props, context) {
+    const uName = computed(() => props.username + ' ' + props.password);
+
+    context.emit('save-data');
+
+    return {
+      uName: uName,
+    };
+  },
+};
+</script>
+```
+
+### Life cycle
+
+Options API => Composition API
+
+- beforeCreate, created => not needed (setup())
+- beforeMount, mounted => onBeforeMount, onMounted
+- beforeUpdate, updated => onBeforeUpdate, onUpdated
+- beforeUnmounted, unmounted => onBeforeUnmounted, onUnmounted
+
+### Routing
+
+You can use `useRoute()` and `useRouter()` hooks instead of `this.$route`.
+
+### Vuex
+
+You can use `useStore()` hook instead of `this.$store`.
 
 ## Fix Vue problems
 
