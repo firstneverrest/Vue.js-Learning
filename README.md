@@ -1841,6 +1841,62 @@ You can use `useRoute()` and `useRouter()` hooks instead of `this.$route`.
 
 You can use `useStore()` hook instead of `this.$store`.
 
+## Mixins
+
+Mixin contains data(), methods() and others for creating reusable code. If the component that apply mixin has it own data(), it will merge and the data() in that component will overwrite the data() from mixin.
+
+- global mixins - add in every component
+
+## Custom Composition Functions
+
+An alternative to mixins and recommend to use.
+
+```js
+// counter.js
+import { ref } from 'vue';
+
+export default function useCounter(startValue = 0) {
+  const counter = ref(startValue);
+
+  function addCounter() {
+    counter.value++;
+  }
+
+  function removeCounter() {
+    counter.value--;
+  }
+
+  return [counter, addCounter, removeCounter];
+}
+```
+
+```vue
+<template>
+  <div>
+    <h1>Home Page</h1>
+    <p>Welcome to our Home</p>
+    <p>{{ counter }}</p>
+    <button @click="addCounter">Add</button>
+    <button @click="removeCounter">Subtract</button>
+  </div>
+</template>
+
+<script>
+import useCounter from '../hooks/counter.js';
+export default {
+  setup() {
+    const [counter, addCounter, removeCounter] = useCounter(10);
+
+    return {
+      counter,
+      addCounter,
+      removeCounter,
+    };
+  },
+};
+</script>
+```
+
 ## Fix Vue problems
 
 1. The template root requires exactly on element

@@ -18,7 +18,6 @@ const router = createRouter({
       name: 'about',
       component: About,
       beforeEnter(to, from, next) {
-        console.log('CreateRouter: beforeEnter');
         next();
       },
     },
@@ -34,12 +33,10 @@ const router = createRouter({
 });
 
 router.afterEach((to, from, next) => {
-  console.log('Global: afterEach');
   next();
 });
 
 router.beforeEach((to, from, next) => {
-  console.log('Global: beforeEach');
   next();
 });
 
